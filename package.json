@@ -10,8 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
+    "custom-env": "^1.0.0",
+    "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "hbs": "^4.0.3",
-    "nextcloud-node-client": "^0.3.1"
+    "nextcloud-node-client": "^0.3.1",
+    "request": "^2.88.0",
+    "vcap_services": "^0.6.0"
   }
 }
