@@ -24,7 +24,7 @@ function init() {
   // width and height for the THREE.PlaneGeometry that will be used for the two slides
   var width = 100;
   var height = 60;
-  var counter = 0;
+  var counter = 2;
   // create 2 slides. One will transition in, the other will transition out. This will occur simultaneously.
 
   // slide 1 will be the transition out slide
@@ -38,7 +38,7 @@ function init() {
   // );
   var myImg = new THREE.ImageLoader()
   // myImg.setCrossOrigin("use-credentials");
-      myImg.load(photos[counter], function(image) {
+      myImg.load(photos[0], function(image) {
       slide.setImage(image);
     }
   );
@@ -48,7 +48,7 @@ function init() {
   root.scene.add(slide2);
   var myImg2 = new THREE.ImageLoader()
   // myImg.setCrossOrigin("use-credentials");
-      myImg2.load(photos[counter + 1], function(image) {
+      myImg2.load(photos[1], function(image) {
       slide2.setImage(image);
     }
   );
@@ -61,38 +61,124 @@ function init() {
 
 
 
-  var endFunc = function (item) {
+  // var endFunc = function (item) {
 
-    if (!tl.reversed()) {
-      // item.set(item, {delay: 5}, -1)
-        // counter ++ counter % 2 == 0
-        myImg.load(photos[counter + 2], function(image) {
+  //   if (!tl.reversed()) {
+  //     // item.set(item, {delay: 5}, -1)
+  //       // counter ++ counter % 2 == 0
+  //       myImg.load(photos[counter + 2], function(image) {
+  //       slide.setImage(image);
+  //     })
+  //     console.log("even image")
+  //   } else {
+  //     // item.set(item, {delay: 5}, 0)
+  //       myImg2.load(photos[counter + 2], function(image) {
+  //       slide2.setImage(image);
+  //       })
+  //       console.log("odd image")
+
+  //   }
+  //   console.log(item)
+  //   console.log(counter)
+
+  //   counter ++;
+  //   return
+
+  // }
+
+var delay = 5;
+var firstPlay = true;
+var message = "start";
+var tl = new TimelineMax({ yoyo: true, repeat: -1, repeatDelay: delay });
+
+
+tl.add(doCoolStuff);
+tl.add(slide.transition(), 0);
+tl.add(slide2.transition(), 0);
+tl.add(doCoolStuff);
+
+function doCoolStuff() {
+  if (!firstPlay) {
+
+    console.log("not first play")
+    if (counter % 2 == 0) {
+      console.log("set even image")
+      myImg.load(photos[counter], function(image) {
         slide.setImage(image);
       })
-      console.log("even image")
     } else {
-      // item.set(item, {delay: 5}, 0)
-        myImg2.load(photos[counter + 2], function(image) {
+      console.log("set odd image")
+      myImg2.load(photos[counter], function(image) {
         slide2.setImage(image);
-        })
-        console.log("odd image")
-
+      })
     }
-    console.log(item)
-    console.log(counter)
-
-    counter ++;
-    return
-
+    console.log(counter, photos.length)
+    counter = counter === photos.length ? 0 : counter + 1
   }
 
-  var updateCounter = function () {
-    counter ++;
-    return;
+  if (firstPlay) {
+    console.log("first play true")
+    tl.pause();
+    firstPlay = false;
+    TweenMax.delayedCall(delay, function() {
+      tl.play();
+    });
   }
+  console.log(message);
+
+  message = message === "start" ? "end" : "start";
+  // if (!firstPlay) {
+  //   console.log("not first play")
+  //   if (counter % 2 == 0) {
+  //     myImg2.load(photos[counter], function(image) {
+  //       slide2.setImage(image);
+  //     })
+  //   } else {
+  //     myImg.load(photos[counter], function(image) {
+  //       slide.setImage(image);
+  //     })
+  //   }
+  // }
+
+}
   // create a timeline for the two transitions
   // var tl = new TimelineMax({ delay: 5.0, repeat: -1, repeatDelay: 30.0, yoyo: true }).eventCallback("onRepeat", function() {
-  var tl = new TimelineMax({ delay: 5.0, repeat: -1, repeatDelay: 5.0, yoyo: true })
+  // var tl = new TimelineMax({ onComplete: function () {
+  //   // updateCounter()
+  //   console.log("on complete")
+  //   counter ++
+  //   console.log(counter)
+  //   console.log(this.endTime())
+  //   console.log(this)
+  //   this.reverse().to({}, 5, {});
+  //   // this.reverse().delay()
+  //   // this.pause();
+  //   // var _this = this;
+  //   // if (counter % 2 == 0) {
+  //   //   console.log("even slide: ", counter)
+  //   //   myImg.load(photos[counter], function(image) {
+  //   //     slide.setImage(image);
+  //   //     console.log("slide 0 updated")
+  //   //     _this.resume()
+  //   //     })
+  //   // } else {
+  //   //   console.log("odd slide: ", counter )
+  //   //   myImg2.load(photos[counter], function(image) {
+  //   //     slide2.setImage(image);
+  //   //     console.log("slide 1 updated")
+  //   //     // _this.resume();
+  //   //     })
+  //   // }
+  // }, onComplete: function () {
+  //   console.log("reverse complete")
+  //   // this.play().to({}, 10, {});
+  //   // this.to({}, 5, {})
+  //   // this.clear()
+  //   // this.play().delay(10)
+  // } })
+  // .call(function() {
+  //   console.log("call function fired")
+  // }, ["param1"], this, "+=-1")
 
   // tl.eventCallback("onReverseComplete", function () {
   //   console.log("reverse complete")
@@ -123,8 +209,8 @@ function init() {
   //   }
   // });
 
-  tl.add(slide.transition(), 0);
-  tl.add(slide2.transition(), 0);
+  // tl.add(slide.transition(), 0);
+  // tl.add(slide2.transition(), 0);
 
   // scrub the timeline by moving the mouse or your finger
   // new TweenScrubber(tl);
