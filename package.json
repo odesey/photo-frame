@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node src/app.js",
     "node-dev": "DEBUG=wpedemo node app",
     "webpack-dev": "webpack -d --watch",
     "webpack-prod": "webpack -p",
