@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node app.js",
+    "node-dev": "DEBUG=wpedemo node app",
+    "webpack-dev": "webpack -d --watch",
+    "webpack-prod": "webpack -p",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
