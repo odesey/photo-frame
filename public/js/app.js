@@ -25,6 +25,7 @@ function init() {
   var width = 100;
   var height = 60;
   var counter = 2;
+  var lastImgUpdate = "odd";
   // create 2 slides. One will transition in, the other will transition out. This will occur simultaneously.
 
   // slide 1 will be the transition out slide
@@ -86,59 +87,45 @@ function init() {
 
   // }
 
-var delay = 5;
+var delay = 2;
 var firstPlay = true;
-var message = "start";
 var tl = new TimelineMax({ yoyo: true, repeat: -1, repeatDelay: delay });
 
 
-tl.add(doCoolStuff);
+tl.add(updateImage);
 tl.add(slide.transition(), 0);
 tl.add(slide2.transition(), 0);
-tl.add(doCoolStuff);
+tl.add(updateImage);
 
-function doCoolStuff() {
+
+function updateImage() {
+  // console.log("not first play")
   if (!firstPlay) {
-
-    console.log("not first play")
-    if (counter % 2 == 0) {
-      console.log("set even image")
+    if (lastImgUpdate !== "even") {
       myImg.load(photos[counter], function(image) {
         slide.setImage(image);
       })
+      lastImgUpdate = "even"
     } else {
-      console.log("set odd image")
       myImg2.load(photos[counter], function(image) {
         slide2.setImage(image);
       })
+      lastImgUpdate = "odd"
     }
-    console.log(counter, photos.length)
-    counter = counter === photos.length ? 0 : counter + 1
+    prevCounter = counter;
+    counter = counter === (photos.length - 1) ? 0 : counter + 1
   }
 
   if (firstPlay) {
-    console.log("first play true")
     tl.pause();
     firstPlay = false;
     TweenMax.delayedCall(delay, function() {
       tl.play();
     });
   }
-  console.log(message);
+  // console.log(message);
 
-  message = message === "start" ? "end" : "start";
-  // if (!firstPlay) {
-  //   console.log("not first play")
-  //   if (counter % 2 == 0) {
-  //     myImg2.load(photos[counter], function(image) {
-  //       slide2.setImage(image);
-  //     })
-  //   } else {
-  //     myImg.load(photos[counter], function(image) {
-  //       slide.setImage(image);
-  //     })
-  //   }
-  // }
+  // message = message === "start" ? "end" : "start";
 
 }
   // create a timeline for the two transitions
